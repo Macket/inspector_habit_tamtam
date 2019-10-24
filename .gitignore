@@ -1,0 +1,15 @@
+venv/
+.idea/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+*.log
+*.log.*
+
+.env
+ttb.sqlite3
+utils/scripts.py
