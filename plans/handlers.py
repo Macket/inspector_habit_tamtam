@@ -69,6 +69,11 @@ def handle_finish_plan(bot, update):
     del preparing_plans[update.user_id]
 
 
+def handle_cancel_plan(bot, update):
+    del preparing_plans[update.user_id]
+    handle_plans_menu(bot, update)
+
+
 def handle_report_plan(bot, update):
     user = User.get(update.user_id)
     plan = Plan.get(update.cmd_args['plan_id'])

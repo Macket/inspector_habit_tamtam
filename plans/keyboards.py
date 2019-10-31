@@ -1,14 +1,18 @@
 from TamTamBot import CallbackButtonCmd
-from openapi_client import Intent, RequestGeoLocationButton
-from users.models import User
+from openapi_client import Intent
 from checks.utils import CheckStatus
-from users.data import preparing_habits
+from users.data import preparing_plans
 
 
 def get_finish_plan_keyboard(user):
-    return [[CallbackButtonCmd(
+    buttons = [[CallbackButtonCmd(
+        '❌ Отменить' if user.language_code == 'ru' else '❌ Cancel',
+        'cancel_plan', {}, Intent.POSITIVE)]]
+    if len(preparing_plans[user.id]['plan_array']) > 0:
+        buttons.insert(0, [CallbackButtonCmd(
             'Завершить' if user.language_code == 'ru' else 'Finish',
-            'finish_plan', {}, Intent.POSITIVE)]]
+            'finish_plan', {}, Intent.POSITIVE)])
+    return buttons
 
 
 def get_report_plan_keyboard(user, plan_id):

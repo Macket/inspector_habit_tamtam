@@ -239,6 +239,10 @@ class InspectorHabitBot(TamTamBot):
         plans.handle_finish_plan(self, update)
         return False
 
+    def cmd_handler_cancel_plan(self, update):
+        plans.handle_cancel_plan(self, update)
+        return False
+
     def cmd_handler_report_plan(self, update):
         plans.handle_report_plan(self, update)
         return False
