@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
+
+
 from TamTamBot.TamTamBot import TamTamBot
-from openapi_client import NewMessageBody, BotCommand
+from openapi_client import NewMessageBody, BotCommand, NewMessageLink, MessageLinkType
 from openapi_client.models import StickerAttachment, StickerAttachmentPayload
 from TamTamBot.utils.lng import set_use_django
 from settings import TT_BOT_API_TOKEN
@@ -8,6 +10,7 @@ import users.intro as intro
 import menu.handlers as menu
 import plans.handlers as plans
 from checks.handlers import handle_habit_report
+from reminders.handlers import handle_audio
 from users.data import preparing_habits, preparing_plans
 
 
@@ -19,9 +22,11 @@ class InspectorHabitBot(TamTamBot):
     @property
     def description(self):
         return '🇷🇺Инспектор Хэбит поможет вам приобрести полезные привычки и ' \
-               'избавиться от вредных. А также этот бот будет полезен в планировании вашего дня.\n\n ' \
+               'избавиться от вредных. А также этот бот будет полезен в планировании вашего дня.\n' \
+               '🔥 Теперь можно создавать напоминания при помощи голосовых сообщений!\n\n' \
                '🇬🇧Inspector Habit will help you to develop good habits and break bad habits.' \
-               'This bot will also be useful in planning your day.'
+               'This bot will also be useful in planning your day.\n' \
+               '🔥 Now you can create reminders via voice messages!'
 
     def get_commands(self):
         # type: () -> [BotCommand]
@@ -57,6 +62,23 @@ class InspectorHabitBot(TamTamBot):
             pass
         return res
 
+    def forward_message(self, user_id, mid):
+        link = NewMessageLink(MessageLinkType.FORWARD, mid)
+        try:
+            self.msg.send_message(NewMessageBody(link=link), user_id=user_id)
+        except:
+            pass
+
+    def reply_message(self, user_id, mid, text, keyboard=None):
+        link = NewMessageLink(MessageLinkType.REPLY, mid)
+        mb = NewMessageBody(text, link=link)
+        if keyboard:
+            self.add_buttons_to_message_body(mb, keyboard)
+        try:
+            self.msg.send_message(mb, user_id=user_id)
+        except:
+            pass
+
     def edit_message(self, mid, text):
         res = False
         try:
@@ -90,6 +112,9 @@ class InspectorHabitBot(TamTamBot):
 
         if update.message.body.attachments and update.message.body.attachments[0].type == 'sticker':
             print(update.message.body.attachments[0].payload.code)
+
+        if update.message.body.attachments and update.message.body.attachments[0].type == 'audio':
+            handle_audio(self, update)
 
     def cmd_handler_start(self, update):
         intro.register(self, update)
@@ -157,6 +182,15 @@ class InspectorHabitBot(TamTamBot):
         elif update.cmd_args['section'] == 'plans':
             menu.handle_plans_menu(self, update)
             return False
+        elif update.cmd_args['section'] == 'reminders':
+            menu.handle_reminders_menu(self, update)
+            return False
+        elif update.cmd_args['section'] == 'my_reminders':
+            menu.handle_my_reminders(self, update)
+            return False
+        elif update.cmd_args['section'] == 'reminders_help':
+            menu.handle_reminders_help(self, update)
+            return False
         elif update.cmd_args['section'] == 'settings':
             menu.handle_settings_menu(self, update)
             return False
@@ -184,6 +218,10 @@ class InspectorHabitBot(TamTamBot):
 
     def cmd_handler_delete_habit(self, update):
         menu.handle_delete_habit(self, update)
+        return True
+
+    def cmd_handler_delete_reminder(self, update):
+        menu.handle_delete_reminder(self, update)
         return True
 
     def cmd_handler_new_habit(self, update):

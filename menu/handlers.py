@@ -1,6 +1,7 @@
 from users.models import User
 from checks.models import Check
 from habits.models import Habit
+from reminders.models import Reminder
 from checks.utils import status_icons
 from menu import keyboards
 from users.utils import get_user_naming
@@ -8,6 +9,7 @@ from utils.database import execute_database_command
 import settings
 from tzwhere import tzwhere
 import re
+from datetime import datetime
 
 
 def handle_main_menu(bot, update):
@@ -34,6 +36,15 @@ def handle_plans_menu(bot, update):
     bot.send_message(update.user.user_id,
                      'Планы' if user.language_code == 'ru' else 'Plans',
                      keyboard=keyboards.get_plans_keyboard(user),
+                     update=update.update_current)
+
+
+def handle_reminders_menu(bot, update):
+    user = User.get(update.user_id)
+
+    bot.send_message(update.user.user_id,
+                     'Напоминания' if user.language_code == 'ru' else 'Reminders',
+                     keyboard=keyboards.get_reminders_keyboard(user),
                      update=update.update_current)
 
 
@@ -253,6 +264,20 @@ def handle_delete_habit(bot, update):
     bot.send_message(update.user_id, text)
 
 
+def handle_delete_reminder(bot, update):
+    user = User.get(update.user_id)
+    reminder = Reminder.get(update.cmd_args['reminder_id'])
+    if reminder:
+        execute_database_command(f'DELETE FROM reminders WHERE id = {reminder.id};')
+        bot.delete_message(update.message.body.mid)
+    else:
+        ru_text = f'Такого напоминания не существует'
+        en_text = f'This reminder does not exists'
+        text = ru_text if user.language_code == 'ru' else en_text
+
+        bot.send_message(update.user_id, text)
+
+
 def handle_new_habit(bot, update):
     update.required_cmd_response = True
 
@@ -260,6 +285,50 @@ def handle_new_habit(bot, update):
 
     ru_text = 'Над какой привычкой будем работать?'
     en_text = 'What habit will we work on?'
+    text = ru_text if user.language_code == 'ru' else en_text
+
+    bot.send_message(update.user_id, text)
+
+
+def handle_my_reminders(bot, update):
+    user = User.get(update.user_id)
+    now_utc = datetime.strptime(datetime.utcnow().strftime("%Y-%m-%d %H:%M"), "%Y-%m-%d %H:%M")  # TODO Нужно исправить
+    reminders = execute_database_command(
+        f'SELECT id, mid, datetime_native FROM reminders WHERE '
+        f'datetime_utc > %s AND user_id = %s', (now_utc, user.id))
+
+    for reminder in reminders:
+        reminder_id = reminder[0]
+        mid = reminder[1]
+        date = reminder[2].strftime("%d.%m.%Y")
+        time = reminder[2].strftime("%H:%M")
+        print(reminder_id)
+        text = f'{date} в {time}'
+        if user.language_code != 'ru':
+            text = 'On ' + text.replace('в', 'at')
+        bot.reply_message(user.id, mid, text, keyboard=keyboards.get_delete_reminder_keyboard(user, reminder_id))
+
+    if not reminders:
+        ru_text = 'Нет ни одного напоминания'
+        en_text = 'There are no any reminders'
+        text = ru_text if user.language_code == 'ru' else en_text
+        bot.send_message(update.user_id, text)
+
+
+def handle_reminders_help(bot, update):
+    user = User.get(update.user_id)
+    ru_text = 'Чтобы создать напоминание, отправь мне голосовое сообщение следующего плана: ' \
+              '*Напомни мне ... <сегодня|завтра|день недели> в <время>*\n\n' \
+              'Например:\n' \
+              '*Напомни мне позвонить маме сегодня в двадцать тридцать (20:30)*\n' \
+              '*Напомни мне убраться в воскресенье в двенадцать ноль ноль (12:00)*\n\n' \
+              'Порядок слов не важен. Главное, чтобы были указаны день и время.'
+    en_text = 'To create a reminder send me the voice message such as: ' \
+              'Remind me ... <today|tomorrow|day of week> at <time>\n\n' \
+              'For example:\n' \
+              '*Remind me to call my mother today at three ought seven p m (15:07)*\n' \
+              '*Remind me to clean my room on sunday at ten a m (10:00)*\n\n' \
+              "The order of words doesn't matter. The main thing is that a day and time are indicated."
     text = ru_text if user.language_code == 'ru' else en_text
 
     bot.send_message(update.user_id, text)

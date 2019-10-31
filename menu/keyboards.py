@@ -9,6 +9,7 @@ def get_menu_keyboard(user):
     ru_buttons = [
         [CallbackButtonCmd('🗓 Привычки', 'menu', {'section': 'habits'}, Intent.POSITIVE)],
         [CallbackButtonCmd('📝 Планы', 'menu', {'section': 'plans'}, Intent.POSITIVE)],
+        [CallbackButtonCmd('🔔 Напомнинания 🆕', 'menu', {'section': 'reminders'}, Intent.POSITIVE)],
         [CallbackButtonCmd('⚙️ Настройки', 'menu', {'section': 'settings'}, Intent.POSITIVE)],
         [CallbackButtonCmd('✉️ Написать разработчикам', 'menu', {'section': 'contact_developers'}, Intent.POSITIVE)],
     ]
@@ -16,6 +17,7 @@ def get_menu_keyboard(user):
     en_buttons = [
         [CallbackButtonCmd('🗓 Habits', 'menu', {'section': 'habits'}, Intent.POSITIVE)],
         [CallbackButtonCmd('📝 Plans', 'menu', {'section': 'plans'}, Intent.POSITIVE)],
+        [CallbackButtonCmd('🔔 Reminders 🆕', 'menu', {'section': 'reminders'}, Intent.POSITIVE)],
         [CallbackButtonCmd('⚙️ Settings', 'menu', {'section': 'settings'}, Intent.POSITIVE)],
         [CallbackButtonCmd('✉️ Contact developers', 'menu', {'section': 'contact_developers'}, Intent.POSITIVE)],
     ]
@@ -71,6 +73,24 @@ def get_plans_keyboard(user):
         [tomorrow_plan_button],
         [CallbackButtonCmd('⬅ Назад' if user.language_code == 'ru' else '⬅ Back', 'menu')],
     ]
+
+    return buttons
+
+
+def get_reminders_keyboard(user):
+    ru_buttons = [
+        [CallbackButtonCmd('🔔 Мои напоминания', 'menu', {'section': 'my_reminders'}, Intent.POSITIVE)],
+        [CallbackButtonCmd('❓ Как создать напоминание', 'menu', {'section': 'reminders_help'}, Intent.POSITIVE)],
+        [CallbackButtonCmd('⬅ Назад', 'menu')],
+    ]
+
+    en_buttons = [
+        [CallbackButtonCmd('🔔 My reminders', 'menu', {'section': 'my_reminders'}, Intent.POSITIVE)],
+        [CallbackButtonCmd('❓ How to create a reminder', 'menu', {'section': 'reminders_help'}, Intent.POSITIVE)],
+        [CallbackButtonCmd('⬅ Back', 'menu')],
+    ]
+
+    buttons = ru_buttons if user.language_code == 'ru' else en_buttons
 
     return buttons
 
@@ -176,6 +196,16 @@ def get_delete_habit_keyboard(user, habit_id):
 
     buttons = [
         [CallbackButtonCmd(button_label, 'delete_habit', {'habit_id': habit_id}, Intent.NEGATIVE)],
+    ]
+
+    return buttons
+
+
+def get_delete_reminder_keyboard(user, reminder_id):
+    button_label = 'Удалить' if user.language_code == 'ru' else 'Delete'
+
+    buttons = [
+        [CallbackButtonCmd(button_label, 'delete_reminder', {'reminder_id': reminder_id}, Intent.NEGATIVE)],
     ]
 
     return buttons

@@ -4,6 +4,7 @@ from users.db_commands import DROP_USERS_TABLE, CREATE_USERS_TABLE
 from habits.db_commands import DROP_HABITS_TABLE, CREATE_HABITS_TABLE
 from checks.db_commands import DROP_CHECKS_TABLE, CREATE_CHECKS_TABLE
 from plans.db_commands import DROP_PLANS_TABLE, CREATE_PLANS_TABLE
+from reminders.db_commands import DROP_REMINDERS_TABLE, CREATE_REMINDERS_TABLE
 import urllib.parse as urlparse
 
 
@@ -42,19 +43,22 @@ def execute_database_command(command, args=None):
 
 def init_database():
     if settings.DEBUG:
-        commands = [DROP_CHECKS_TABLE,
+        commands = [DROP_REMINDERS_TABLE,
+                    DROP_CHECKS_TABLE,
                     DROP_HABITS_TABLE,
                     DROP_PLANS_TABLE,
                     DROP_USERS_TABLE,
                     CREATE_USERS_TABLE,
                     CREATE_PLANS_TABLE,
                     CREATE_HABITS_TABLE,
-                    CREATE_CHECKS_TABLE]
+                    CREATE_CHECKS_TABLE,
+                    CREATE_REMINDERS_TABLE]
     else:
         commands = [CREATE_USERS_TABLE,
                     CREATE_PLANS_TABLE,
                     CREATE_HABITS_TABLE,
-                    CREATE_CHECKS_TABLE]
+                    CREATE_CHECKS_TABLE,
+                    CREATE_REMINDERS_TABLE]
     for command in commands:
         execute_database_command(command)
     print('bot has been started')

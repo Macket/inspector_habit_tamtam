@@ -13,3 +13,6 @@ __pycache__/
 .env
 ttb.sqlite3
 utils/scripts.py
+
+*.mp3
+*.wav
