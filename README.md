@@ -1,6 +1,6 @@
 # Inspector Habit — 🏆 [Winner](https://tamtam.chat/botapichannel/AW5LroptDXs) of TamTam [bot developers contest](https://blog.tamtam.chat/ru/2019/08/02/)
 
-Inspector Habit is a [TamTam](https://tamtam.chat/) bot which helps people to develop good habits and break bad ones. Users also can plan their day and create reminders via voice messages.
+Inspector Habit is a [TamTam](https://tamtam.chat/) bot which helps people to develop good habits and break bad ones. Users can also plan their day and create reminders via voice messages.
 
 
 ## Getting Started
@@ -51,3 +51,72 @@ Then you can start Inspector Habit with this command:
 python main.py
 ```
 
+## Use case
+
+There are three main functions in the menu: **🗓 Habits**, **📝 Plans** and **🔔 Reminders**.
+
+![1](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/1.png)
+
+### 🗓 Habits
+
+![2](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/2.png)
+
+Let's see current active habits.
+
+![3](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/3.png)
+
+And let's create a new one.
+
+![4](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/4.png)
+
+![5](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/5.png)
+
+When check time is coming, we will get the following message from Inspector Habit.
+
+![6](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/6.png)
+
+Suppose we kept our promise and tap **✅ Yes**.
+
+![7](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/7.png)
+
+### 📝 Plans
+
+![8](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/8.png)
+
+Let's create today plan.
+
+![9](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/9.png)
+
+Ok, plan is ready.
+
+![10](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/10.png)
+
+Now we can report.
+
+![11](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/11.png)
+
+Suppose that we have done README.
+
+![12](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/12.png)
+
+When report is ended we will see the following.
+
+![13](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/13.png)
+
+And can create tomorrow plan.
+
+### **🔔 Reminders**
+
+![14](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/14.png)
+
+How to create reminders?
+
+![15](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/15.png)
+
+Ok, we don't have any reminders, so let's create the first one.
+
+![16](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/16.png)
+
+And we get a reminder in time.
+
+![17](https://raw.githubusercontent.com/Macket/inspector_habit_tamtam/master/img/readme/17.png)
