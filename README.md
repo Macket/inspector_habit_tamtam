@@ -1,4 +1,4 @@
-# Inspector Habit — 🏆 [Winner](https://tamtam.chat/botapichannel/AW5LroptDXs) of TamTam [bot developers contest](https://blog.tamtam.chat/ru/2019/08/02/)
+# Inspector Habit — 🏆 [The Winner](https://tamtam.chat/botapichannel/AW5LroptDXs) of TamTam [bot developers contest](https://blog.tamtam.chat/ru/2019/08/02/)
 
 Inspector Habit is a [TamTam](https://tamtam.chat/) bot which helps people to develop good habits and break bad ones. Users can also plan their day and create reminders via voice messages.
 
